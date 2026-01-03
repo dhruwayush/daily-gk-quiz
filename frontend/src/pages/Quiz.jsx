@@ -216,15 +216,20 @@ const Quiz = () => {
                 <div className="grid grid-cols-1 gap-4 mb-32 md:mb-0">
                     {currentQuestion.options.map((option, index) => {
                         let optionClass = "group w-full p-5 md:p-6 rounded-2xl text-left text-lg md:text-xl font-medium transition-all duration-300 border-2 relative overflow-hidden ";
+                        let circleClass = "flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold border transition-colors duration-300 ";
 
                         if (selectedOption === null) {
                             optionClass += "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20 hover:scale-[1.01] active:scale-[0.99] text-slate-200";
+                            circleClass += "border-white/20 group-hover:border-white/40 text-slate-400";
                         } else if (option === currentQuestion.answer) {
-                            optionClass += "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]";
+                            optionClass += "bg-emerald-500/20 border-emerald-500 text-white shadow-[0_0_30px_rgba(16,185,129,0.3)]";
+                            circleClass += "bg-emerald-500 border-emerald-500 text-white";
                         } else if (option === selectedOption) {
-                            optionClass += "bg-red-500/20 border-red-500/50 text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.2)]";
+                            optionClass += "bg-red-500/20 border-red-500 text-white shadow-[0_0_30px_rgba(239,68,68,0.3)]";
+                            circleClass += "bg-red-500 border-red-500 text-white";
                         } else {
                             optionClass += "bg-white/5 border-transparent opacity-40 grayscale";
+                            circleClass += "border-white/20 text-slate-500";
                         }
 
                         return (
@@ -235,10 +240,7 @@ const Quiz = () => {
                                 className={optionClass}
                             >
                                 <div className="flex items-center gap-4 relative z-10">
-                                    <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold border transition-colors duration-300 ${selectedOption === option || option === currentQuestion.answer
-                                        ? 'border-current bg-current/10'
-                                        : 'border-white/20 group-hover:border-white/40 text-slate-400'
-                                        }`}>
+                                    <span className={circleClass}>
                                         {String.fromCharCode(65 + index)}
                                     </span>
                                     <span>{option}</span>

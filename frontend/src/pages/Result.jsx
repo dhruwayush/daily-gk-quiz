@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { App } from '@capacitor/app'; // Import Capacitor App
 import confetti from 'canvas-confetti';
 import logo from '../assets/logo.png';
 
@@ -7,6 +8,24 @@ const Result = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
 
+    // Handle Hardware Back Button
+    useEffect(() => {
+        let backListener;
+        const setupListener = async () => {
+            backListener = await App.addListener('backButton', () => {
+                navigate('/', { replace: true });
+            });
+        };
+        setupListener();
+
+        return () => {
+            if (backListener) {
+                backListener.remove();
+            }
+        };
+    }, [navigate]);
+
+    // Validation to prevent crashing if accessed directly
     if (!state) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">

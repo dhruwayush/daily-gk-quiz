@@ -2,8 +2,27 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
+import { App } from '@capacitor/app';
+
 const Home = () => {
     const navigate = useNavigate();
+
+    // Handle Hardware Back Button to Exit App
+    React.useEffect(() => {
+        let backListener;
+        const setupListener = async () => {
+            backListener = await App.addListener('backButton', () => {
+                App.exitApp();
+            });
+        };
+        setupListener();
+
+        return () => {
+            if (backListener) {
+                backListener.remove();
+            }
+        };
+    }, []);
 
     const categories = [
         { id: 'GK', name: 'General Knowledge', icon: '🌍', color: 'from-blue-500 to-cyan-500' },
@@ -52,6 +71,16 @@ const Home = () => {
                             </div>
                         </button>
                     ))}
+                </div>
+
+                <div className="mt-12 text-center">
+                    <button
+                        onClick={() => navigate('/privacy')}
+                        className="text-slate-500 hover:text-white text-sm transition-colors underline decoration-slate-600 hover:decoration-white underline-offset-4"
+                    >
+                        Privacy Policy
+                    </button>
+                    <p className="text-slate-600 text-xs mt-2">v1.0.0 • Made with ❤️</p>
                 </div>
             </div>
         </div>
