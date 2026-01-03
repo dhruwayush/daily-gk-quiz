@@ -1,0 +1,8 @@
+{
+  "appId": "com.dailygkquiz.app",
+  "appName": "Daily GK Quiz",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  }
+}
