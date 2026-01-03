@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Home = () => {
         <div className="min-h-screen bg-slate-900 p-4 font-sans flex flex-col items-center justify-center">
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-12">
+                    <img src={logo} alt="Daily GK Quiz Logo" className="w-24 h-24 mx-auto mb-4 drop-shadow-2xl rounded-3xl" />
                     <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
                         Daily <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">GK Quiz</span>
                     </h1>
