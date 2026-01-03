@@ -63,7 +63,7 @@ app.get("/privacy-policy", (req, res) => {
             <p>Our services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
 
             <h2>5. Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:support@dailygkquiz.com">support@dailygkquiz.com</a></p>
+            <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:dhruwayush@gmail.com">dhruwayush@gmail.com</a></p>
 
             <div class="footer">
                 &copy; ${new Date().getFullYear()} Daily GK Quiz. All rights reserved.

@@ -56,7 +56,7 @@ const PrivacyPolicy = () => {
                     <section>
                         <h2 className="text-emerald-400 font-bold text-lg mb-2">6. Contact Us</h2>
                         <p>
-                            If you have any questions about this Privacy Policy, please contact us at: <span className="text-blue-400">support@dailygkquiz.com</span>
+                            If you have any questions about this Privacy Policy, please contact us at: <span className="text-blue-400">dhruwayush@gmail.com</span>
                         </p>
                     </section>
 
