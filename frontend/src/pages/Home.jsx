@@ -80,6 +80,9 @@ const Home = () => {
                     >
                         Privacy Policy
                     </button>
+                    <p className="text-slate-600 text-xs mt-4 max-w-md mx-auto leading-relaxed">
+                        <strong>Disclaimer:</strong> This app is not affiliated with any government entity. All content is for educational purposes only.
+                    </p>
                     <p className="text-slate-600 text-xs mt-2">v1.0.0 • Made with ❤️</p>
                 </div>
             </div>

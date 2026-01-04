@@ -62,7 +62,13 @@ app.get("/privacy-policy", (req, res) => {
             <h2>4. Children's Privacy</h2>
             <p>Our services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.</p>
 
-            <h2>5. Contact Us</h2>
+            <h2>5. Government Disclaimer</h2>
+            <p><strong>This app does not represent a government entity.</strong> We are not affiliated with, endorsed by, or connected to the Government of India, UPSC, SSC, or any other official body. All information relevant to government exams is provided strictly for educational and practice purposes.</p>
+
+            <h2>6. Information Sources</h2>
+            <p>The questions in this app are generated using general knowledge and publicly available educational resources. We do not claim this information to be official government data.</p>
+
+            <h2>7. Contact Us</h2>
             <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:dhruwayush@gmail.com">dhruwayush@gmail.com</a></p>
 
             <div class="footer">

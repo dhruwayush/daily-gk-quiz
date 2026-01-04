@@ -54,7 +54,21 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section>
-                        <h2 className="text-emerald-400 font-bold text-lg mb-2">6. Contact Us</h2>
+                        <h2 className="text-emerald-400 font-bold text-lg mb-2">6. Government Disclaimer</h2>
+                        <p>
+                            <strong>This app does not represent a government entity.</strong> We are not affiliated with, endorsed by, or connected to the Government of India, UPSC, SSC, or any other official body. All information relevant to government exams is provided strictly for educational and practice purposes.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-emerald-400 font-bold text-lg mb-2">7. Information Sources</h2>
+                        <p>
+                            The questions in this app are generated using general knowledge and publicly available educational resources. We do not claim this information to be official government data.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h2 className="text-emerald-400 font-bold text-lg mb-2">8. Contact Us</h2>
                         <p>
                             If you have any questions about this Privacy Policy, please contact us at: <span className="text-blue-400">dhruwayush@gmail.com</span>
                         </p>
