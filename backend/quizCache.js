@@ -10,46 +10,59 @@ const { generateDailyQuiz } = require("./gemini");
 // If topic/difficulty change, should we return the cached "Daily" quiz or a new one?
 // "Daily GK Quiz" usually implies one static quiz per day for everyone.
 // BUT, if the user asks for a specific topic, returning the generic daily quiz might be wrong.
-// Let's implement a hybrid: 
-// 1. If no params or default params -> return the main cached Daily Quiz.
-// 2. If specific params -> generate new (and maybe cache it with a key including those params).
-// For strict adherence to "Daily Quiz Cache" prompt: "Store quiz by date".
-// I will implement a cache keyed by "YYYY-MM-DD-TOPIC-DIFFICULTY".
-
-const quizCache = new Map();
+const supabase = require("./supabaseClient");
 
 const getQuizForToday = async (topic = "General Knowledge", difficulty = "Medium") => {
     // FORCE IST (Indian Standard Time) for "Daily" calculation
-    // UTC + 5:30
     const now = new Date();
     const istOffset = 5.5 * 60 * 60 * 1000;
     const istDate = new Date(now.getTime() + istOffset);
     const dateKey = istDate.toISOString().split("T")[0]; // YYYY-MM-DD in IST
 
-    // Log for debugging
-    // console.log(`Server Time (UTC): ${now.toISOString()}`);
-    // console.log(`Adjusted IST Date: ${dateKey}`);
-
+    // Unique Key for the DB
     const cacheKey = `${dateKey}-${topic}-${difficulty}`;
 
-    if (quizCache.has(cacheKey)) {
-        console.log(`Returning cached quiz for ${cacheKey}`);
-        return quizCache.get(cacheKey);
-    }
-
-    console.log(`Generating new quiz for ${cacheKey}`);
     try {
-        const quizData = await generateDailyQuiz(topic, difficulty);
-        quizCache.set(cacheKey, quizData);
+        // 1. Check Supabase DB
+        const { data: cachedQuiz, error: fetchError } = await supabase
+            .from('daily_quizzes')
+            .select('*')
+            .eq('date_key', cacheKey)
+            .single();
 
-        // Optional: Clear old cache entries to save memory (simple implementation)
-        // In a production app, use node-cache or Redis with TTL.
-        // Here we just keep adding. Restarting server clears it.
+        if (cachedQuiz) {
+            console.log(`Returning persisted quiz from Supabase for ${cacheKey}`);
+            return cachedQuiz.data; // The 'data' column holds the JSON
+        }
+
+        if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "Row not found"
+            console.error("Supabase Fetch Error:", fetchError);
+            // Proceed to generate fresh if DB read fails (fail-open)
+        }
+
+        // 2. Not found or Error -> Generate New
+        console.log(`Generating new quiz for ${cacheKey}`);
+        const quizData = await generateDailyQuiz(topic, difficulty);
+
+        // 3. Store in Supabase
+        const { error: insertError } = await supabase
+            .from('daily_quizzes')
+            .insert([
+                { date_key: cacheKey, data: quizData }
+            ]);
+
+        if (insertError) {
+            console.error("Supabase Insert Error:", insertError);
+        } else {
+            console.log("Persisted new quiz to Supabase");
+        }
 
         return quizData;
+
     } catch (error) {
-        console.error("Error fetching/caching quiz:", error);
-        throw error;
+        console.error("Critical Error in Quiz Cache Layer:", error);
+        // Fallback: Just return generated data without caching if DB is totally broken
+        return await generateDailyQuiz(topic, difficulty);
     }
 };
 
