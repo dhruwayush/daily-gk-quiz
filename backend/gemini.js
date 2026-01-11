@@ -1,12 +1,8 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+// OpenRouter Integration (replaces GoogleGenerativeAI)
 require("dotenv").config();
 const fallbackQuizzes = require("./fallbackData");
 
 // Initialize Gemini API
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
 const generateDailyQuiz = async (topic = "General Knowledge", difficulty = "Medium") => {
     try {
         let topicPrompt = `topic: "${topic}"`;
@@ -37,12 +33,32 @@ const generateDailyQuiz = async (topic = "General Knowledge", difficulty = "Medi
       }
     `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://daily-gk-quiz.onrender.com", // Optional, for including your app on openrouter.ai rankings.
+                "X-Title": "Daily GK Quiz", // Optional. Shows in rankings on openrouter.ai.
+            },
+            body: JSON.stringify({
+                "model": "google/gemini-1.5-flash",
+                "messages": [
+                    { "role": "user", "content": prompt }
+                ]
+            })
+        });
 
-        // Clean up potential markdown formatting if Gemini adds it despite instructions
-        const jsonString = text.replace(/```json/g, "").replace(/```/g, "").trim();
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`OpenRouter API Error: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        let content = data.choices[0].message.content;
+
+        // Clean up potential markdown formatting
+        const jsonString = content.replace(/```json/g, "").replace(/```/g, "").trim();
 
         try {
             const quizData = JSON.parse(jsonString);
@@ -55,21 +71,12 @@ const generateDailyQuiz = async (topic = "General Knowledge", difficulty = "Medi
             return quizData;
         } catch (parseError) {
             console.error("JSON Parse Error:", parseError);
-            console.error("Raw Response:", text);
+            console.error("Raw Response:", content);
             throw new Error("Failed to parse quiz data from AI");
         }
 
     } catch (error) {
-        console.error("Gemini API Error Detail:", error.message);
-        if (error.response) {
-            try {
-                const errorText = await error.response.text();
-                console.error("Gemini API Response Error Full:", errorText);
-            } catch (e) {
-                console.error("Could not read error response text");
-            }
-        }
-
+        console.error("AI Generation Error:", error.message);
         console.warn(`Falling back to static quiz for topic: ${topic} due to API error.`);
         return fallbackQuizzes[topic] || fallbackQuizzes["General Knowledge"];
     }
