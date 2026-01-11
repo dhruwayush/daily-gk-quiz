@@ -16,7 +16,10 @@ const generateDailyQuiz = async (topic = "General Knowledge", difficulty = "Medi
 
         const prompt = `
       You are a quiz master for Indian competitive exams. 
-      Generate 10 multiple-choice questions (MCQs) on the ${topicPrompt} with difficulty: "${difficulty}".
+      Generate 10 UNIQUE and FRESH multiple-choice questions (MCQs) on the ${topicPrompt} with difficulty: "${difficulty}".
+      
+      Context: Today's date is ${new Date().toDateString()}. Ensure questions are distinct from previous sets.
+      Random Seed: ${Math.random().toString(36).substring(7)}
       
       Requirements:
       1. The questions should be relevant to Indian exams like UPSC, SSC, Railways, etc.

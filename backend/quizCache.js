@@ -19,7 +19,17 @@ const { generateDailyQuiz } = require("./gemini");
 const quizCache = new Map();
 
 const getQuizForToday = async (topic = "General Knowledge", difficulty = "Medium") => {
-    const dateKey = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    // FORCE IST (Indian Standard Time) for "Daily" calculation
+    // UTC + 5:30
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istDate = new Date(now.getTime() + istOffset);
+    const dateKey = istDate.toISOString().split("T")[0]; // YYYY-MM-DD in IST
+
+    // Log for debugging
+    // console.log(`Server Time (UTC): ${now.toISOString()}`);
+    // console.log(`Adjusted IST Date: ${dateKey}`);
+
     const cacheKey = `${dateKey}-${topic}-${difficulty}`;
 
     if (quizCache.has(cacheKey)) {

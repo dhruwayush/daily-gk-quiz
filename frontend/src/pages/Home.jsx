@@ -73,16 +73,29 @@ const Home = () => {
                     ))}
                 </div>
 
-                <div className="mt-12 text-center">
+                <div className="mt-8 mb-4 max-w-2xl mx-auto">
+                    <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 text-center backdrop-blur-sm">
+                        <div className="flex items-center justify-center gap-2 mb-2 text-amber-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            <span className="font-bold text-sm">Government Disclaimer</span>
+                        </div>
+                        <p className="text-slate-400 text-xs leading-relaxed">
+                            This app is <strong>not affiliated</strong> with any government entity (e.g., UPSC, SSC, Govt of India).
+                            It strictly provides educational quizzes for practice.
+                            Official information should be verified at <span className="text-blue-400">india.gov.in</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="mt-8 text-center">
                     <button
                         onClick={() => navigate('/privacy')}
                         className="text-slate-500 hover:text-white text-sm transition-colors underline decoration-slate-600 hover:decoration-white underline-offset-4"
                     >
                         Privacy Policy
                     </button>
-                    <p className="text-slate-600 text-xs mt-4 max-w-md mx-auto leading-relaxed">
-                        <strong>Disclaimer:</strong> This app is not affiliated with any government entity. All content is for educational purposes only.
-                    </p>
                     <p className="text-slate-600 text-xs mt-2">v1.0.0 • Made with ❤️</p>
                 </div>
             </div>
